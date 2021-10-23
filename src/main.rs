@@ -125,7 +125,6 @@ fn is_winning(vec: &mut Vec<Vec<u8>>) -> bool {
             for k in 0..3 {
                 if vec[i-k][j+k] == vec[i-k-1][j+k+1] && vec[i-k][j+k] != 0 {
                     victoire=victoire+1;
-                    println!("{}", victoire);
                 } else {
                     victoire = 0;
                 }
