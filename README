@@ -1,3 +1,2 @@
 Dépendance : rust
-lancer le programme :
-cargo run
+Compiler et lancer le programme : rustc p4.rs && ./p4
