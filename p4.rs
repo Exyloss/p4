@@ -1,6 +1,6 @@
 use std::io::{stdin,stdout,Write};
 fn main() {
-    let mut v = vec![vec![0;7];7];
+    let mut v: Vec<Vec<u8>> = vec![vec![0;7];7];
     let num: [usize; 7] = [1, 2, 3, 4, 5, 6, 7];
     let mut j: u8 =1;
     let mut err: u8 = 0;
@@ -12,9 +12,11 @@ fn main() {
         affiche_tours(&v);
         let mut r = String::new();
         if j == 1 {
-            println!("{}Proposition du joueur 1 :{}", red, white);
+            println!("{}joueur 1{}", red, white);
+            print!(":");
         } else {
-            println!("{}Proposition du joueur 2 :{}", yellow, white);
+            println!("{}joueur 2{}", yellow, white);
+            print!(":");
         }
         let _=stdout().flush();
         stdin().read_line(&mut r).expect("Did not enter a correct string");
@@ -33,7 +35,17 @@ fn main() {
             } else {
                 println!("{}Le joueur 2 a gagné.", yellow);
             }
-            break
+            let mut r2 = String::new();
+            print!("{}Rejouer ? (o/n)", white);
+            let _=stdout().flush();
+            stdin().read_line(&mut r2).expect("Did not enter a correct string");
+            if r2.trim() == "o" {
+                v = vec![vec![0;7];7];
+                j = 2;
+                err = 0;
+            } else {
+                break;
+            }
         }
         if j == 1 && err == 0 {
             j=2;
@@ -45,10 +57,11 @@ fn main() {
     }
 }
 
-fn affiche_tours(vec: &Vec<Vec<u32>>) {
+fn affiche_tours(vec: &Vec<Vec<u8>>) {
     let mut temp = String::new();
-    println!("\x1b[34m1 2 3 4 5 6 7");
+    println!("\x1b[34m  1 2 3 4 5 6 7");
     for i in 0..7 {
+        temp=temp+"\x1b[34m"+&i.to_string()+" ";
         for j in 0..7 {
             if vec[i][j] == 1 {
                 temp = temp+"\x1b[31m0 \x1b[39m";
@@ -63,7 +76,7 @@ fn affiche_tours(vec: &Vec<Vec<u32>>) {
     }
 }
 
-fn poser_pion(col: usize, vec: &mut Vec<Vec<u32>>, j: u8) {
+fn poser_pion(col: usize, vec: &mut Vec<Vec<u8>>, j: u8) {
     for i in (0..7).rev() {
         if vec[i][col-1] == 0 && j == 1 {
             vec[i][col-1] = 1;
@@ -75,7 +88,7 @@ fn poser_pion(col: usize, vec: &mut Vec<Vec<u32>>, j: u8) {
     }
 }
 
-fn is_winning(vec: &mut Vec<Vec<u32>>) -> bool {
+fn is_winning(vec: &mut Vec<Vec<u8>>) -> bool {
     let mut victoire = 0;
     for i in 0..7 {
         for j in 0..6 {

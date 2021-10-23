@@ -1,2 +1,2 @@
 Dépendance : rust
-Compiler et lancer le programme : rustc p4.rs && ./p4
+Lancer le programme : cd p4-rust && ./p4
