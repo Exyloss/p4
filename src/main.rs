@@ -20,7 +20,9 @@ fn main() {
         let _=stdout().flush();
         stdin().read_line(&mut r).expect("Did not enter a correct string");
         let n: usize = r.trim().parse().unwrap_or(9);
-        if num.contains(&n) {
+        if r.trim() == "q" {
+            break;
+        } else if num.contains(&n) {
             poser_pion(n, &mut v, j);
         } else {
             println!("{}Valeur incorrecte", red);
@@ -114,19 +116,13 @@ fn is_winning(vec: &mut Vec<Vec<u8>>) -> bool {
             }
         }
     }
-    for i in (3..7).rev() {
-        if victoire == 3 {
-            return true
-        }
+    for i in 3..7 {
         for j in 0..3 {            
             if victoire == 3 {
                 return true
             }
             victoire = 0;
             for k in 0..3 {
-                if victoire == 3 {
-                    return true
-                }
                 if vec[i-k][j+k] == vec[i-k-1][j+k+1] && vec[i-k][j+k] != 0 {
                     victoire=victoire+1;
                     println!("{}", victoire);
@@ -136,19 +132,13 @@ fn is_winning(vec: &mut Vec<Vec<u8>>) -> bool {
             }
         }
     }
-    for i in (3..7).rev() {
-        if victoire == 3 {
-            return true
-        }
-        for j in (3..7).rev() {
+    for i in 3..7 {
+        for j in 3..7 {
             if victoire == 3 {
                 return true
             }
             victoire = 0;
             for k in 0..3 {
-                if victoire == 3 {
-                    return true
-                }
                 if vec[i-k][j-k] == vec[i-k-1][j-k-1] && vec[i-k][j-k] != 0 {
                     victoire=victoire+1;
                 } else {
