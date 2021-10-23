@@ -7,7 +7,7 @@ fn main() {
     let yellow = "\x1b[33m";
     let white = "\x1b[39m";
     let red = "\x1b[31m";
-    //let blue = "\x1b[34m";
+    let green = "\x1b[32m";
     loop {
         affiche_tours(&v);
         let mut r = String::new();
@@ -23,6 +23,7 @@ fn main() {
             poser_pion(n, &mut v, j);
         } else {
             println!("{}Valeur incorrecte", red);
+            println!("{}Aide : \nQuitter le programme : ctrl+c\nSélectionner une colonne : 1..7.", green);
             err=1;
         }
         if is_winning(&mut v) == true {
