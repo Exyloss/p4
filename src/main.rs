@@ -79,7 +79,7 @@ fn affiche_tours(vec: &Vec<Vec<u8>>, comb_gagnante: &Vec<Vec<usize>>) {
                     temp = temp+"\x1b[33m0 \x1b[39m";
                 }
             } else {
-                temp = temp+"\x1b[39m0 ";
+                temp = temp+"\x1b[39m  ";
             }
         }
         println!("{}", temp);
