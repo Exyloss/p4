@@ -1,2 +1,2 @@
 Dépendance : rust
-Lancer le programme : cd p4-rust && ./p4
+Lancer le programme : cd p4-rust && cargo run

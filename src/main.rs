@@ -4,11 +4,12 @@ fn main() {
     let num: [usize; 7] = [1, 2, 3, 4, 5, 6, 7];
     let mut j: u8 = 1;
     let mut err: u8 = 0;
+    let comb_gagnante: Vec<Vec<usize>> = vec![vec![8;2];4];
     let yellow = "\x1b[33m";
     let white = "\x1b[39m";
     let red = "\x1b[31m";
     loop {
-        affiche_tours(&v);
+        affiche_tours(&v, &comb_gagnante);
         let mut r = String::new();
         if j == 1 {
             println!("{}joueur 1{}", red, white);
@@ -18,7 +19,7 @@ fn main() {
             print!(":");
         }
         let _=stdout().flush();
-        stdin().read_line(&mut r).expect("Did not enter a correct string");
+        stdin().read_line(&mut r).expect("Chaine incorrecte");
         let n: usize = r.trim().parse().unwrap_or(9);
         if r.trim() == "q" {
             break;
@@ -26,11 +27,10 @@ fn main() {
             poser_pion(n, &mut v, j);
         } else {
             println!("{}Valeur incorrecte", red);
-            println!("\x1b[32mAide : \nQuitter le programme : ctrl+c\nSélectionner une colonne : 1..7.");
+            println!("\x1b[32mAide : \nQuitter le programme : ctrl+c ou q\nSélectionner une colonne : 1..7.");
             err = 1;
         }
         if is_winning(&mut v) == true {
-            affiche_tours(&v);
             if j == 1 {
                 println!("{}Le joueur 1 a gagné.", red);
             } else {
@@ -58,16 +58,26 @@ fn main() {
     }
 }
 
-fn affiche_tours(vec: &Vec<Vec<u8>>) {
+fn affiche_tours(vec: &Vec<Vec<u8>>, comb_gagnante: &Vec<Vec<usize>>) {
+    //let bright_yellow = "\x1b[93m";
+    //let bright_red = "\x1b[91m";
     let mut temp = String::new();
     println!("\x1b[34m  1 2 3 4 5 6 7");
     for i in 0..7 {
         temp=temp+"\x1b[34m"+&(i+1).to_string()+" ";
         for j in 0..7 {
             if vec[i][j] == 1 {
-                temp = temp+"\x1b[31m0 \x1b[39m";
+                if comb_gagnante.contains(&vec![i, j]) {
+                    temp = temp+"\x1b[92m0 \x1b[99m";
+                } else {
+                    temp = temp+"\x1b[31m0 \x1b[39m";
+                }
             } else if vec[i][j] == 2 {
-                temp = temp+"\x1b[33m0 \x1b[39m";
+                if comb_gagnante.contains(&vec![i, j]) {
+                    temp = temp+"\x1b[92m0 \x1b[99m";
+                } else {
+                    temp = temp+"\x1b[33m0 \x1b[39m";
+                }
             } else {
                 temp = temp+"\x1b[39m0 ";
             }
@@ -79,11 +89,8 @@ fn affiche_tours(vec: &Vec<Vec<u8>>) {
 
 fn poser_pion(col: usize, vec: &mut Vec<Vec<u8>>, j: u8) {
     for i in (0..7).rev() {
-        if vec[i][col-1] == 0 && j == 1 {
-            vec[i][col-1] = 1;
-            break;
-        } else if vec[i][col-1] == 0 && j == 2 {
-            vec[i][col-1] = 2;
+        if vec[i][col-1] == 0 {
+            vec[i][col-1] = j;
             break;
         }
     }
@@ -91,12 +98,17 @@ fn poser_pion(col: usize, vec: &mut Vec<Vec<u8>>, j: u8) {
 
 fn is_winning(vec: &mut Vec<Vec<u8>>) -> bool {
     let mut victoire = 0;
+    let mut comb_gagnante: Vec<Vec<usize>> = vec![vec![8;2];4];
     for i in 0..7 {
         for j in 0..6 {
-            if victoire == 3 {
-                return true
-            } else if vec[i][j] == vec[i][j+1] && vec[i][j] != 0 {
+            if vec[i][j] == vec[i][j+1] && vec[i][j] != 0 {
+                comb_gagnante[victoire] = vec![i,j];
                 victoire=victoire+1;
+                if victoire == 3 {
+                    comb_gagnante[3] = vec![i, j+1];
+                    affiche_tours(&vec, &comb_gagnante);
+                    return true
+                }
             } else {
                 victoire = 0;
             }
@@ -106,11 +118,14 @@ fn is_winning(vec: &mut Vec<Vec<u8>>) -> bool {
     victoire = 0;
     for i in 0..7 {
         for j in 0..6 {
-            if victoire == 3 {
-                return true
-            }
             if vec[j][i] == vec[j+1][i] && vec[j][i] != 0 {
+                comb_gagnante[victoire] = vec![j,i];
                 victoire=victoire+1;
+                if victoire == 3 {
+                    comb_gagnante[3] = vec![j+1, i];
+                    affiche_tours(&vec, &comb_gagnante);
+                    return true
+                }
             } else {
                 victoire = 0;
             }
@@ -118,30 +133,32 @@ fn is_winning(vec: &mut Vec<Vec<u8>>) -> bool {
     }
     for i in 3..7 {
         for j in 0..3 {            
-            if victoire == 3 {
-                return true
-            }
             victoire = 0;
             for k in 0..3 {
                 if vec[i-k][j+k] == vec[i-k-1][j+k+1] && vec[i-k][j+k] != 0 {
+                    comb_gagnante[victoire] = vec![i-k,j+k];
                     victoire=victoire+1;
-                } else {
-                    victoire = 0;
+                    if victoire == 3 {
+                        comb_gagnante[3] = vec![i-k-1, j+k+1];
+                        affiche_tours(&vec, &comb_gagnante);
+                        return true
+                    }
                 }
             }
         }
     }
     for i in 3..7 {
         for j in 3..7 {
-            if victoire == 3 {
-                return true
-            }
             victoire = 0;
             for k in 0..3 {
                 if vec[i-k][j-k] == vec[i-k-1][j-k-1] && vec[i-k][j-k] != 0 {
+                    comb_gagnante[victoire] = vec![i-k,j-k];
                     victoire=victoire+1;
-                } else {
-                    victoire = 0;
+                    if victoire == 3 {
+                        comb_gagnante[3] = vec![i-k-1, j-k-1];
+                        affiche_tours(&vec, &comb_gagnante);
+                        return true
+                    }
                 }
             }
         }
