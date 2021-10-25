@@ -69,13 +69,13 @@ fn affiche_tours(vec: &Vec<Vec<u8>>, comb_gagnante: &Vec<Vec<usize>>) {
         for j in 0..7 {
             if vec[i][j] == 1 {
                 if comb_gagnante.contains(&vec![i, j]) {
-                    temp = temp+"\x1b[92m0 \x1b[99m";
+                    temp = temp+"\x1b[91m0 \x1b[99m";
                 } else {
                     temp = temp+"\x1b[31m0 \x1b[39m";
                 }
             } else if vec[i][j] == 2 {
                 if comb_gagnante.contains(&vec![i, j]) {
-                    temp = temp+"\x1b[92m0 \x1b[99m";
+                    temp = temp+"\x1b[93m0 \x1b[99m";
                 } else {
                     temp = temp+"\x1b[33m0 \x1b[39m";
                 }
