@@ -27,7 +27,7 @@ fn main() {
             poser_pion(n, &mut v, j);
         } else {
             println!("{}Valeur incorrecte", red);
-            println!("\x1b[32mAide : \nQuitter le programme : ctrl+c ou q\nSélectionner une colonne : 1..7.");
+            println!("\x1b[32mAide : \nQuitter le programme : ctrl+c ou q\nSélectionner une colonne : 1..7.\x1b[39m");
             err = 1;
         }
         if is_winning(&mut v) == true {
@@ -62,9 +62,10 @@ fn affiche_tours(vec: &Vec<Vec<u8>>, comb_gagnante: &Vec<Vec<usize>>) {
     //let bright_yellow = "\x1b[93m";
     //let bright_red = "\x1b[91m";
     let mut temp = String::new();
-    println!("\x1b[34m  1 2 3 4 5 6 7");
+    println!("/----------------\\");
+    println!("|\x1b[34m0 1 2 3 4 5 6 7 \x1b[39m|");
     for i in 0..7 {
-        temp=temp+"\x1b[34m"+&(i+1).to_string()+" ";
+        temp=temp+"|\x1b[34m"+&(i+1).to_string()+" ";
         for j in 0..7 {
             if vec[i][j] == 1 {
                 if comb_gagnante.contains(&vec![i, j]) {
@@ -82,9 +83,10 @@ fn affiche_tours(vec: &Vec<Vec<u8>>, comb_gagnante: &Vec<Vec<usize>>) {
                 temp = temp+"\x1b[39m  ";
             }
         }
-        println!("{}", temp);
+        println!("{}|", temp);
         temp = String::new();
     }
+    println!("\\----------------/");
 }
 
 fn poser_pion(col: usize, vec: &mut Vec<Vec<u8>>, j: u8) {
