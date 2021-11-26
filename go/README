@@ -1,0 +1,5 @@
+Dépendance : 
+ - go
+
+ Lancer le programme : 
+ git clone httos://github.com/exyloss/p4-go && cd p4-go && go build p4.go && ./p4
